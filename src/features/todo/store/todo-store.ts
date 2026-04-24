@@ -14,6 +14,12 @@ class TodoStoreClass extends Store<TodoState> {
     this.setState({ tasks });
   }
 
+  update(id: string, title: string): void {
+    const tasks = this._state.tasks.map(t => t.id === id ? { ...t, title } : t);
+    TodoService.save(tasks);
+    this.setState({ tasks });
+  }
+
   remove(id: string): void {
     const tasks = this._state.tasks.filter(t => t.id !== id);
     TodoService.save(tasks);

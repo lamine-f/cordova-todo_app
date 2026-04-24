@@ -84,11 +84,12 @@ cordova run android      # nécessite émulateur ou device branché
 │   │           ├── loading-screen.ts
 │   │           └── events.ts   ← enum LoadingScreenEvent
 │   ├── features/               ← code métier par feature
-│   │   └── imc/
-│   │       ├── types/imc.types.ts
-│   │       ├── services/imc-service.ts
-│   │       ├── store/imc-store.ts
-│   │       └── screens/imc-screen.ts
+│   │   └── todo/
+│   │       ├── types/todo.types.ts
+│   │       ├── services/todo-service.ts
+│   │       ├── store/todo-store.ts
+│   │       ├── actions/todo-actions.ts  ← add / update / remove
+│   │       └── screens/todo-screen.ts
 │   ├── theme/colors.ts         ← design tokens TS (miroir de www/css/theme.css)
 │   └── enums/                  ← enums globaux
 └── www/
@@ -156,16 +157,16 @@ Pas de router multi-page classique : un objet `_routes` mappe une clé (lue depu
 ```ts
 // src/navigation/router.ts
 const _routes: Record<string, RouteConfig> = {
-  imc: {
-    components: [LoadingScreen, ImcScreen]
+  todo: {
+    components: [LoadingScreen, TodoScreen]
   }
 };
 
 export const Router = {
   init(): void {
     const parent = document.getElementById('app') as HTMLElement;
-    const route  = window.location.hash.slice(2) || 'imc';
-    const config = _routes[route] ?? _routes['imc'];
+    const route  = window.location.hash.slice(2) || 'todo';
+    const config = _routes[route] ?? _routes['todo'];
 
     AppStore.setState({ [LoadingScreenEvent.VISIBLE]: true });
     config.components.forEach(c => c.init(parent));
@@ -210,11 +211,14 @@ class AppStoreClass extends Store<{ [key: string]: unknown }> {
 }
 export const AppStore = new AppStoreClass();
 
-// src/features/imc/store/imc-store.ts
-class ImcStoreClass extends Store<ImcState> {
-  constructor() { super({ height: null, weight: null, result: null, category: null }); }
+// src/features/todo/store/todo-store.ts
+class TodoStoreClass extends Store<TodoState> {
+  constructor() { super({ tasks: TodoService.load() }); }
+  add(title: string): void { /* ... */ }
+  update(id: string, title: string): void { /* ... */ }
+  remove(id: string): void { /* ... */ }
 }
-export const ImcStore = new ImcStoreClass();
+export const TodoStore = new TodoStoreClass();
 ```
 
 ### 4.5 TemplateEngine
@@ -335,10 +339,10 @@ npm install
 - [ ] **`scripts/update-cordova-html.js`** — `<title>` dans le template HTML généré
 - [ ] **`src/lib/env.ts`** — `APP_NAME`, `VERSION`
 - [ ] **`src/theme/colors.ts`** + **`www/css/theme.css`** — couleurs brand (garder les deux synchronisés : TS pour usage inline, CSS variables pour stylesheets)
-- [ ] **Supprimer `src/features/imc/`** — créer `src/features/<votre-feature>/` avec la même structure (`types/`, `services/`, `store/`, `screens/`)
-- [ ] **`src/navigation/router.ts`** — remplacer la route `imc` par la vôtre, mettre à jour les imports
+- [ ] **Supprimer `src/features/todo/`** — créer `src/features/<votre-feature>/` avec la même structure (`types/`, `services/`, `store/`, `actions/`, `screens/`)
+- [ ] **`src/navigation/router.ts`** — remplacer la route `todo` par la vôtre, mettre à jour les imports
 - [ ] **Adapter les templates HTML** dans vos nouveaux screens
-- [ ] **Supprimer `src/enums/imc-category.ts`** s'il n'est plus utilisé
+- [ ] **Supprimer les enums spécifiques** à la feature si non réutilisés
 
 ### Prompt de démarrage (à copier-coller dans un agent IA)
 
@@ -367,12 +371,12 @@ Je veux démarrer un nouveau projet. Voici les infos :
    - `src/lib/env.ts` : APP_NAME, VERSION
    - Si couleurs fournies : `src/theme/colors.ts` + `www/css/theme.css` (garde les deux synchronisés)
 
-2. **Remplacement de la feature** `imc` → `<ma-feature>` :
-   - Renomme `src/features/imc/` → `src/features/<ma-feature>/`
-   - Renomme les fichiers (`imc-screen.ts` → `<ma-feature>-screen.ts`, etc.) et les symboles (`ImcScreen`, `ImcStore`, `ImcService`, `ImcState`, `ImcInputs`)
-   - Vide le contenu métier : `_template()` → placeholder « Hello <MON_APP> », `*-service.ts` → fonctions stub, `*-store.ts` → state `{}` typé minimal
+2. **Remplacement de la feature** `todo` → `<ma-feature>` :
+   - Renomme `src/features/todo/` → `src/features/<ma-feature>/`
+   - Renomme les fichiers (`todo-screen.ts` → `<ma-feature>-screen.ts`, etc.) et les symboles (`TodoScreen`, `TodoStore`, `TodoService`, `TodoActions`, `TodoState`)
+   - Vide le contenu métier : `_template()` → placeholder « Hello <MON_APP> », `*-service.ts` → fonctions stub, `*-store.ts` → state `{}` typé minimal, `*-actions.ts` → méthodes stub
    - Mets à jour `src/navigation/router.ts` : route `<ma-feature>` pointant vers `[LoadingScreen, <MaFeature>Screen]`
-   - Supprime `src/enums/imc-category.ts` s'il n'est plus importé
+   - Supprime les enums spécifiques s'ils ne sont plus importés
 
 3. **Réinitialisation du repo** :
    - Supprime `README.md` actuel (spécifique au boilerplate) OU garde-le si tu préfères — demande-moi
@@ -413,6 +417,7 @@ src/features/auth/
 ├── types/auth.types.ts
 ├── services/auth-service.ts
 ├── store/auth-store.ts
+├── actions/auth-actions.ts
 └── screens/login-screen.ts
 ```
 
@@ -422,7 +427,7 @@ Puis dans `src/navigation/router.ts` :
 import { LoginScreen } from '@/features/auth/screens/login-screen';
 
 const _routes: Record<string, RouteConfig> = {
-  imc:  { components: [LoadingScreen, ImcScreen] },
+  todo: { components: [LoadingScreen, TodoScreen] },
   auth: { components: [LoadingScreen, LoginScreen] }   // ← nouvelle route #/auth
 };
 ```

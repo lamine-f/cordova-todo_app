@@ -53,6 +53,16 @@
   background-color: var(--color-primary-hover);
 }
 
+/* Todo edit inline */
+.todo-edit-input {
+  width: 65%;
+  padding: 4px 8px;
+  font-size: 1rem;
+  margin-right: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
 /* Result section */
 .imc-section-result {
   margin-top: var(--spacing-lg);
