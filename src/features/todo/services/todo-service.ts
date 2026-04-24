@@ -9,7 +9,9 @@ export const TodoService = {
     if (!raw) return [];
     try {
       const parsed = JSON.parse(raw) as Task[];
-      return Array.isArray(parsed) ? parsed : [];
+      return Array.isArray(parsed)
+        ? parsed.map(t => ({ ...t, done: (t as any).done ?? false }))
+        : [];
     } catch {
       return [];
     }
@@ -20,6 +22,6 @@ export const TodoService = {
   },
 
   create(title: string): Task {
-    return { id: String(Date.now()) + Math.random().toString(36).slice(2, 6), title };
+    return { id: String(Date.now()) + Math.random().toString(36).slice(2, 6), title, done: false };
   }
 };

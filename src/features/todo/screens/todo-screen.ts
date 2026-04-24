@@ -15,6 +15,7 @@ function _template(): string {
         </div>
         <button type="submit" data-role="button" data-theme="b">Ajouter</button>
       </form>
+      <button type="button" id="btn-reset" data-role="button" data-theme="a">Réinitialiser</button>
       <ul id="todo-list" data-role="listview" data-inset="true"></ul>
     </div>
   `;
@@ -35,5 +36,7 @@ export const TodoScreen: Component = {
       TodoActions.add(input.value);
       input.value = '';
     });
+
+    this._view!.on('#btn-reset', 'click', () => TodoActions.clear());
   }
 };

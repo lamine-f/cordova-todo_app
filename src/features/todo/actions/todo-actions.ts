@@ -13,7 +13,15 @@ export const TodoActions = {
     TodoStore.update(id, trimmed);
   },
 
+  toggle(id: string): void {
+    TodoStore.toggle(id);
+  },
+
   remove(id: string): void {
     TodoStore.remove(id);
+  },
+
+  clear(): void {
+    TodoStore.clear();
   }
 };

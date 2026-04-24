@@ -1,6 +1,6 @@
-import { Store }       from '../../../lib/store';
-import { TodoService } from '../services/todo-service';
-import { Task, TodoState } from '../types/todo.types';
+import { Store }            from '../../../lib/store';
+import { TodoService }      from '../services/todo-service';
+import { Task, TodoState }  from '../types/todo.types';
 
 class TodoStoreClass extends Store<TodoState> {
   constructor() {
@@ -8,7 +8,7 @@ class TodoStoreClass extends Store<TodoState> {
   }
 
   add(title: string): void {
-    const task = TodoService.create(title);
+    const task  = TodoService.create(title);
     const tasks = [...this._state.tasks, task];
     TodoService.save(tasks);
     this.setState({ tasks });
@@ -20,10 +20,21 @@ class TodoStoreClass extends Store<TodoState> {
     this.setState({ tasks });
   }
 
+  toggle(id: string): void {
+    const tasks = this._state.tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+    TodoService.save(tasks);
+    this.setState({ tasks });
+  }
+
   remove(id: string): void {
     const tasks = this._state.tasks.filter(t => t.id !== id);
     TodoService.save(tasks);
     this.setState({ tasks });
+  }
+
+  clear(): void {
+    TodoService.save([]);
+    this.setState({ tasks: [] });
   }
 }
 
