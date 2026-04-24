@@ -1,10 +1,11 @@
 import { AppStore }           from '../lib/app-store';
+import { Component }          from '../lib/template-engine';
 import { LoadingScreen }      from '../components/ui/loading-screen/loading-screen';
 import { LoadingScreenEvent } from '../components/ui/loading-screen/events';
 import { TodoScreen }         from '../features/todo/screens/todo-screen';
 
 interface RouteConfig {
-  components: Array<{ init(parent: HTMLElement): void }>;
+  components: Component[];
 }
 
 const _routes: Record<string, RouteConfig> = {
