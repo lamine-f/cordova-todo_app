@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.laminef.imccalculator" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>IMC Calculator</name>
-    <description>Calculateur d'Indice de Masse Corporelle</description>
+<widget id="com.laminef.todoapp" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Todo App</name>
+    <description>Application de gestion de tâches</description>
     <author email="mouhamedlaminefaye77@gmail.com">
         Lamine Faye
     </author>

@@ -1,8 +1,8 @@
 {
-  "name": "imccalculator",
-  "displayName": "IMC Calculator",
-  "version": "1.0.0",
-  "description": "Calculateur d'Indice de Masse Corporelle",
+  "name": "todo-app",
+  "displayName": "Todo App",
+  "version": "0.1.0",
+  "description": "Application de gestion de tâches",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,7 @@
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "Apache Cordova Team",
+  "author": "Lamine Faye <mouhamedlaminefaye77@gmail.com>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/cordova": "^11.0.0",

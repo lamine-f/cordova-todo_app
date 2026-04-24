@@ -1,19 +1,19 @@
 import { AppStore }           from '../lib/app-store';
 import { LoadingScreen }      from '../components/ui/loading-screen/loading-screen';
 import { LoadingScreenEvent } from '../components/ui/loading-screen/events';
-import { ImcScreen }          from '../features/imc/screens/imc-screen';
+import { TodoScreen }         from '../features/todo/screens/todo-screen';
 
 interface RouteConfig {
   components: Array<{ init(parent: HTMLElement): void }>;
 }
 
 const _routes: Record<string, RouteConfig> = {
-  imc: {
-    components: [LoadingScreen, ImcScreen]
+  todo: {
+    components: [LoadingScreen, TodoScreen]
   }
 };
 
-const _DEFAULT_ROUTE = 'imc';
+const _DEFAULT_ROUTE = 'todo';
 
 function _currentRoute(): string {
   return window.location.hash.slice(2) || _DEFAULT_ROUTE;
