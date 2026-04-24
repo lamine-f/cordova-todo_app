@@ -1,0 +1,60 @@
+/* Loading screen */
+#loading {
+  display: none;
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  z-index: 100;
+}
+
+/* IMC form section */
+.imc-section-form {
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  max-width: 400px;
+  margin: auto;
+}
+
+.imc-form div {
+  margin-bottom: 15px;
+}
+
+.imc-form label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+}
+
+.imc-form input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  box-sizing: border-box;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.imc-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.imc-form button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Result section */
+.imc-section-result {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+}
