@@ -5,39 +5,59 @@ import { escape }                              from '../../../../lib/utils/html'
 import { Task }                                from '../../types/todo.types';
 
 let _container: NullableEl = null;
+let _activeTab: 'active' | 'done' = 'active';
+
+export function setTab(tab: 'active' | 'done'): void {
+  _activeTab = tab;
+  _refresh();
+}
 
 function _render(tasks: Task[]): string {
-  if (tasks.length === 0)
-    return `<li class="todo-empty">Aucune tâche pour l'instant</li>`;
+  const filtered = _activeTab === 'active'
+    ? tasks.filter(t => !t.done)
+    : tasks.filter(t =>  t.done);
 
-  const active = tasks.filter(t => !t.done);
-  const done   = tasks.filter(t =>  t.done);
-  let html = '';
-
-  if (active.length > 0) {
-    html += `<li data-role="list-divider">En cours</li>`;
-    html += active.map(t => `
-      <li data-id="${t.id}" data-done="false">
-        <a href="#">${escape(t.title)}</a>
-      </li>`).join('');
+  if (tasks.length === 0) {
+    return `
+      <div class="todo-empty-state">
+        <div class="todo-empty-icon">✎</div>
+        rien à faire pour l'instant.<br>ajoutez votre première tâche !
+      </div>`;
   }
 
-  if (done.length > 0) {
-    html += `<li data-role="list-divider">Terminées</li>`;
-    html += done.map(t => `
-      <li data-id="${t.id}" data-done="true" class="todo-done">
-        <a href="#" class="todo-done-link">${escape(t.title)}</a>
-      </li>`).join('');
+  if (filtered.length === 0) {
+    const icon = _activeTab === 'active' ? '✓' : '✎';
+    const msg  = _activeTab === 'active'
+      ? 'tout est terminé !'
+      : 'aucune tâche terminée pour l\'instant.';
+    return `
+      <div class="todo-empty-state">
+        <div class="todo-empty-icon">${icon}</div>
+        ${msg}
+      </div>`;
   }
 
-  return html;
+  return filtered.map(t => `
+    <div class="todo-task${t.done ? ' todo-done-item' : ''}" data-id="${t.id}">
+      <span class="todo-bullet"></span>
+      <span>${escape(t.title)}</span>
+    </div>`).join('');
+}
+
+function _updateCounts(tasks: Task[]): void {
+  const activeCount = tasks.filter(t => !t.done).length;
+  const doneCount   = tasks.filter(t =>  t.done).length;
+  const elA = document.getElementById('tab-count-active');
+  const elD = document.getElementById('tab-count-done');
+  if (elA) elA.textContent = activeCount > 0 ? String(activeCount) : '';
+  if (elD) elD.textContent = doneCount   > 0 ? String(doneCount)   : '';
 }
 
 function _refresh(): void {
   if (!_container) return;
-  _container.innerHTML = _render(TodoStore.getState().tasks);
-  const $list = $(_container) as any;
-  if ($list.data('mobile-listview')) $list.listview('refresh');
+  const tasks = TodoStore.getState().tasks;
+  _container.innerHTML = _render(tasks);
+  _updateCounts(tasks);
 }
 
 export const TodoList: Component = {
@@ -49,10 +69,10 @@ export const TodoList: Component = {
     TodoStore.subscribe(() => _refresh());
 
     ($(_container) as any)
-      .on('swipeleft',  'li[data-id]', (e: any) => {
+      .on('swipeleft',  '[data-id]', (e: any) => {
         TodoActions.remove((e.currentTarget as HTMLElement).dataset.id!);
       })
-      .on('swiperight', 'li[data-id]', (e: any) => {
+      .on('swiperight', '[data-id]', (e: any) => {
         TodoActions.toggle((e.currentTarget as HTMLElement).dataset.id!);
       });
   }

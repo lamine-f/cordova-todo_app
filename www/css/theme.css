@@ -17,6 +17,17 @@
   --radius-md: 8px;
 
   --shadow-md: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  /* Wireframe sketch theme */
+  --wf-ink:      #1a1a1a;
+  --wf-ink-soft: #3a3a3a;
+  --wf-paper:    #fafaf6;
+  --wf-paper-2:  #f3f1e8;
+  --wf-muted:    #8a8a80;
+  --wf-accent:   #e85d3b;
+  --wf-done:     #2d8a6f;
+  --wf-add:      #fef3c7;
+  --wf-reset:    #fde1d8;
 }
 
 * {
